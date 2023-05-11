@@ -194,3 +194,180 @@ def timeseries_visualization(country):
     plt.xlabel('Year')
     plt.ylabel('Value')
     plt.show()
+
+# %%
+timeseries_visualization("India")
+
+# %%
+timeseries_visualization("Nepal")
+
+# %%
+# Select data for India
+india_data = Raw_GDP_df[Raw_GDP_df['Country Name'] == 'India']
+
+# Remove unnecessary columns
+india_data = india_data.drop(['Country Name', 'Country Code', 'Indicator Name', 'Indicator Code'], axis=1)
+
+# Transpose the data
+india_data_t = india_data.transpose()
+
+# Reset the index and set the first row as column headers
+india_data_t = india_data_t.reset_index()
+india_data_t.columns = ['Year', 'GDP']
+india_data_t = india_data_t[1:]
+
+# Rename the 'index' column to 'Year'
+india_GDP= india_data_t.rename(columns={'index': 'Year'})
+
+# Reset the index
+india_GDP = india_data_t.reset_index(drop=True)
+
+
+# %%
+india_GDP
+
+# %%
+
+# Select data for India
+UEindia_data = Raw_TotalUnemployment_df[Raw_TotalUnemployment_df['Country Name'] == 'India']
+
+# Remove unnecessary columns
+UEindia_data = UEindia_data.drop(['Country Name', 'Country Code', 'Indicator Name', 'Indicator Code'], axis=1)
+
+# Transpose the data
+UEindia_data_t = UEindia_data.transpose()
+
+# Reset the index and set the first row as column headers
+UEindia_data_t = UEindia_data_t.reset_index()
+UEindia_data_t.columns = ['Year', 'UE']
+UEindia_data_t = UEindia_data_t[1:]
+
+# Rename the 'index' column to 'Year'
+india_UE= UEindia_data_t.rename(columns={'index': 'Year'})
+
+# Reset the index
+india_EU = UEindia_data_t.reset_index(drop=True)
+
+# %%
+india_EU
+
+# %%
+india_merged = pd.merge(india_EU, india_GDP, on='Year')
+
+# %%
+india_merged= india_merged.dropna()
+
+# %%
+india_merged
+
+# %%
+def exponential(t, n0, g):
+    """Calculates exponential function with scale factor n0 and growth rate g."""
+    
+    t = t - 1990
+    f = n0 * np.exp(g*t)
+    
+    return f
+
+# %%
+india_merged['Year'] = pd.to_datetime(india_merged['Year'], format='%Y')
+
+# %%
+
+
+# %%
+
+def exponential(t, n0, g):
+    """Exponential function with scale factor n0 and growth rate g."""
+    t = pd.to_numeric(t) - 1990
+    return n0 * np.exp(g * t)
+
+india_data = Raw_GDP_df[Raw_GDP_df['Country Name'] == 'India']
+
+# Remove unnecessary columns
+india_data = india_data.drop(['Country Name', 'Country Code', 'Indicator Name', 'Indicator Code'], axis=1)
+
+# Transpose the data
+india_data_t = india_data.transpose()
+
+# Reset the index and set the first row as column headers
+india_data_t = india_data_t.reset_index()
+india_data_t.columns = ['Year', 'GDP']
+india_data_t = india_data_t[1:]
+
+# Rename the 'index' column to 'Year'
+india_gdp = india_data_t.rename(columns={'index': 'Year'})
+
+# Reset the index
+india_gdp = india_data_t.reset_index(drop=True)
+
+# Fit the exponential function to the GDP data
+india_merged['Year'] = pd.to_datetime(india_merged['Year'], format='%Y')
+x_data = india_gdp['Year']
+y_data = india_gdp['GDP']
+popt, pcov = curve_fit(exponential, x_data, y_data)
+
+# Generate predicted GDP values using the fitted parameters
+y_pred = exponential(x_data, *popt)
+try:
+    # Plot the original GDP data and the fitted curve
+    plt.plot(x_data, y_data, label='Original GDP')
+    plt.plot(x_data, y_pred, label='Fitted Curve')
+    plt.xlabel('Year')
+    plt.ylabel('GDP')
+    plt.title('GDP for India')
+    plt.legend()
+    plt.show()
+except:
+    pass
+
+# %%
+
+def exponential(t, n0, g):
+    """Exponential function with scale factor n0 and growth rate g."""
+    t = pd.to_numeric(t) - 1990
+    return n0 * np.exp(g * t)
+
+india_data = Raw_GDP_df[Raw_GDP_df['Country Name'] == 'Nepal']
+
+# Remove unnecessary columns
+india_data = india_data.drop(['Country Name', 'Country Code', 'Indicator Name', 'Indicator Code'], axis=1)
+
+# Transpose the data
+india_data_t = india_data.transpose()
+
+# Reset the index and set the first row as column headers
+india_data_t = india_data_t.reset_index()
+india_data_t.columns = ['Year', 'GDP']
+india_data_t = india_data_t[1:]
+
+# Rename the 'index' column to 'Year'
+india_gdp = india_data_t.rename(columns={'index': 'Year'})
+
+# Reset the index
+india_gdp = india_data_t.reset_index(drop=True)
+
+# Fit the exponential function to the GDP data
+india_merged['Year'] = pd.to_datetime(india_merged['Year'], format='%Y')
+x_data = india_gdp['Year']
+y_data = india_gdp['GDP']
+popt, pcov = curve_fit(exponential, x_data, y_data)
+
+# Generate predicted GDP values using the fitted parameters
+y_pred = exponential(x_data, *popt)
+try:
+    # Plot the original GDP data and the fitted curve
+    plt.plot(x_data, y_data, label='Original GDP')
+    plt.plot(x_data, y_pred, label='Fitted Curve')
+    plt.xlabel('Year')
+    plt.ylabel('GDP')
+    plt.title('Fitted GDP for Nepal')
+    plt.legend()
+    plt.show()
+except:
+    pass
+
+# %%
+
+
+
